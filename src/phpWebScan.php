@@ -4,7 +4,7 @@
  */
 
 class phpWebScan {
-    public  $infected_files = array();
+    private $infected_files = array();
     private $scanned_files  = array();
     private $fileindex      = array();
     private $modified       = array();
@@ -23,6 +23,7 @@ class phpWebScan {
 
         $files = scandir($dir);
 
+        // if there is no array then stop
         if(!is_array($files)) {
             throw new Exception('Unable to scan directory ' . $dir . '.  Please make sure proper permissions have been set.');
         }
@@ -30,8 +31,10 @@ class phpWebScan {
         // loop through the DIR and check for files or Directories
         foreach($files as $file) {
             if(is_file($dir.'/'.$file) && !in_array($dir.'/'.$file,$this->scanned_files)) {
+                // grab the cile contents and check for malware injection
                 $this->check(file_get_contents($dir.'/'.$file),$dir.'/'.$file);
             } elseif(is_dir($dir.'/'.$file) && substr($file,0,1) != '.') {
+                // do not scan scanner log files as they change every scan
                 if($file != 'scanner-logs')
                     $this->scan($dir.'/'.$file);
             }
