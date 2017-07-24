@@ -19,7 +19,7 @@ define('DOMAIN', '');
 define('FROM_EMAIL', '');
 
 // grab the class
-require('src/scanner.php');
+require('src/phpWebScan.php');
 
 // Run the scan
 $scan = new phpWebScan();
