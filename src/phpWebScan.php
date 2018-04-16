@@ -15,18 +15,13 @@ class phpWebScan {
      * Function to scan a directory for files or more directories
      * @string $dir The directory to scan
      */
-    function scan($dir) {
+    public function scan($dir) {
         // If having issues with timing out uncomment this line
         // set_time_limit(60);
 
         $this->scanned_files[] = $dir;
 
         $files = scandir($dir);
-
-        // if there is no array then stop
-        if(!is_array($files)) {
-            throw new Exception('Unable to scan directory ' . $dir . '.  Please make sure proper permissions have been set.');
-        }
 
         // loop through the DIR and check for files or Directories
         foreach($files as $file) {
@@ -46,7 +41,7 @@ class phpWebScan {
      * @string $contents Content of the file
      * @string $file     Filename being checked
      */
-    function check($contents,$file) {
+    public function check($contents,$file) {
         $this->scanned_files[] = $file;
         $this->fileindex[]     = $file;
 
@@ -71,7 +66,7 @@ class phpWebScan {
     /**
      * Function to create a message containing results of scan
      */
-    function sendalert() {
+    public function sendalert() {
         // files count
         $message = "== FILES SCANNED == <br/><br/>";
         $message .= count($this->fileindex)." files scanned <br/>";
@@ -155,7 +150,7 @@ class phpWebScan {
     /**
      * Function will create a file containing a serialiazed array of files scanned
      */
-    function writeFile() {
+    public function writeFile() {
         // debug. Uncomment to get a fresh file list
         // $this->freshclean();
 
@@ -169,7 +164,7 @@ class phpWebScan {
      * Function to read the previously canned filenames and unserialize them to an array
      * It will also return the last time a file list was created
      */
-    function readFile() {
+    public function readFile() {
         $this->oldfileindex = unserialize(file_get_contents('scanner-logs/scannerfiles.txt'));
         $this->lastscan = filemtime('scanner-logs/scannerfiles.txt');
     }
@@ -177,7 +172,7 @@ class phpWebScan {
     /**
      * Function to help with debugging. Will clear the fileindex array.
      */
-    function freshclean() {
+    public function freshclean() {
         unset($this->fileindex);
         $this->fileindex[] = '';
     }
@@ -186,7 +181,7 @@ class phpWebScan {
      * Function to log results for future reading
      * @string $message Records a log of the results
      */
-    function logResults($message) {
+    public function logResults($message) {
         $fopen = fopen('scanner-logs/scan-results-'.date('H:i').'.log', 'w+');
         fwrite($fopen, $message);
         fclose($fopen);
